@@ -13,6 +13,10 @@
         <style>
             *{
                 font-family: "roboto", sans-serif;
+               
+            }
+            body{
+                margin: 0;
             }
             .addbutton{
                 background-color: green;
@@ -20,7 +24,8 @@
                 width: 15%;
                 height: 25px;
                 color: white;
-                margin-bottom: 10px;
+                margin-right: 5px;
+                border-radius: 5px;
             }
             .todoinput{
                 margin-left: 3px;
@@ -31,7 +36,8 @@
                 height: 20px;
             }
            .result{
-                color: white;
+                color: black;
+                margin-left: 10px;
            }
            .deletebutton{
             height: 20px;
@@ -48,16 +54,17 @@
         
            }
            .maindiv{
-            background-color: rgb(48, 9, 63);
+            position: relative;
+            background-color: wheat;
             width: 450px;
-            
+            padding-bottom: 20px;
            }
            h1{
             font-family: "Sedan SC", serif;
             font-weight: 400;
             font-style: normal;
             margin-left: 10px;
-            color: white;
+            color: black;
            }
            
            .todo1{
@@ -65,30 +72,96 @@
             word-wrap: break-word;
            }
            .inputsdiv{
+           visibility: hidden;
+           }
+           .showdiv{
+            
             display: flex;
             justify-content: space-between;
-            padding-right: 3px;
+            visibility: visible;
+            width: 350px;
+            margin-top: 30px;
+            margin-left: 20px;
+            background-color: white;
+            height: 100px;
+            align-items: center;
+            border-radius: 10px;
+            border: solid 1px black;
            }
            @media screen and (max-width: 600px) {
            .maindiv{
             width: 300px;
            }
            }
+          
+           .topdiv{
+            display: flex;
+            justify-content: space-between;
+            height: 70px;
+            border-bottom: solid 1px black;
+            
+           }
+           
+           .menuicon{
+            margin-top: 20px;
+            cursor: pointer;
+           }
+           .addtask p{
+            margin: 0;
+           }
+           .addtask{
+            position: absolute;
+            right:0 ;
+            margin-right: 20px;
+            margin-bottom: 20px;
+            cursor: pointer;
+           }
+           .addtask img{
+           width: 20px;
+           }
+           .tooltip{
+            font-size: 13px;
+            position: absolute;
+            opacity: 0;
+            top: 95px;
+            right: 5px;
+            z-index: 5;
+            background-color: rgb(228, 226, 226);
+           }
+           .addtask:hover + .tooltip{
+            opacity: 1;
+           }
+           
         </style>
     </head>
     <body>
         <div class="maindiv">
-            <h1>Todo List</h1>
-            <div class="inputsdiv">
+            <div class="topdiv">
+                <h1>Todo List</h1>
+                <div>
+                <img class="menuicon" src="more.png" alt="">
+                </div>
+            </div>
+
+            <div onclick="displaytodoinput()" class="addtask">
+                <img id="addButton" src="plus.svg" alt=""> 
+            </div>
+            <div class="tooltip">Add Task</div>
+
+            <div id="InputDIV" class="inputsdiv">
                 <input placeholder="Enter Task" class="jsinput todoinput" >
                 <input type="date" class="inputjsdate dateinput">
                 <button class="addbutton" onclick="addTodo()">Add</button>
             </div>
+            
             <div class="jsresult result"></div>
+            
         </div>
         <script> 
+
             let todoList = JSON.parse(localStorage.getItem('todoList')) || [];
-        
+           
+            
             function renderList() {
                 let todoListhtml = '';
 
@@ -96,7 +169,7 @@
                     const { name, dueDate } = todoList[i];
                     const html = `
                     <div class= resultdiv>
-                        <p class=todo1>${name} </p> 
+                        <li class=todo1>${name} </li> 
                         <p class=todo2> ${dueDate} </p>
                            
                         
@@ -115,6 +188,7 @@
 
                 const dueDateElem = document.querySelector('.inputjsdate');
                 const dueDate = dueDateElem.value;
+               
 
                 if (!name || !dueDate) {
                     alert('Please enter both todo and due date.');
@@ -126,6 +200,8 @@
                 inputElem.value = '';
                 dueDateElem.value = '';
                 renderList();
+
+                
             }
 
             function deleteTodo(index) {
@@ -137,9 +213,17 @@
             function updateLocalStorage() {
             localStorage.setItem('todoList', JSON.stringify(todoList));
         }
-
-
             renderList();
+
+            function displaytodoinput(){
+                const Inputdiv = document.getElementById('InputDIV');
+                const addBut = document.getElementById('addButton')
+                Inputdiv.classList.toggle('showdiv')
+    
+            }
+
+            
+           
         </script>
     </body>
 </html>
